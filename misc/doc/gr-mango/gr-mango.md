@@ -13,3 +13,10 @@
 
 ## link
 https://www.renesas.com/jp/ja/software-tool/rza2m-freertos-software-package#document
+
+# Boot Mode 
+ブートモード:6 16MByte OctaFLASHから起動
+MD_BOOT0: LOW固定
+MD_BOOT1: HI固定
+MD_BOOT2: HI固定
+
