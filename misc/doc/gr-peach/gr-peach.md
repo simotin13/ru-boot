@@ -11,7 +11,6 @@
  - P87 PIN_LED_USER(赤)
 
 ## link
-https://www.renesas.com/jp/ja/software-tool/rza2m-freertos-software-package#document
 
 # Boot Mode 
 ブートモード:3 SPI マルチI/O バス空間に接続されたシリアルフラッシュメモリからブート
