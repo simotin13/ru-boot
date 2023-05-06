@@ -17,15 +17,15 @@ pub extern "C" fn main() -> ! {
         core::ptr::write_volatile(0xFCFE3418 as *mut u16, 0x0000);
         loop { 
             core::ptr::write_volatile(0xFCFE3018 as *mut u16, LED_PTN_RED_RED);
-            for _ in 1..30000 {
+            for _ in 1..1000 {
                 asm!("nop");
             }
             core::ptr::write_volatile(0xFCFE3018 as *mut u16, LED_PTN_RED_GREEN);
-            for _ in 1..30000 {
+            for _ in 1..1000 {
                 asm!("nop");
             }
             core::ptr::write_volatile(0xFCFE3018 as *mut u16, LED_PTN_RED_BLUE);
-            for _ in 1..30000 {
+            for _ in 1..1000 {
                 asm!("nop");
             }
         } 

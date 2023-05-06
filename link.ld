@@ -5,62 +5,20 @@ MEMORY {
 }
 SECTIONS
 {
-	.fvectors 0x20020000 : AT (0x20020000)
+	.fvectors 0x18000000 : AT (0x18000000)
 	{
 		KEEP(*(.fvectors))
-	} > RAM
-	.text 0x20020100 : AT (0x20020100)
+	} > SPIBSC
+	.text 0x18000100 : AT (0x18000100)
 	{
 		*(.text)
-	} > RAM
-	.rvectors : 
-	{
-		_rvectors_start = .;
-		KEEP(*(.rvectors))
-		_rvectors_end = .;
-	} > RAM
-	.init : 
-	{
-		*(.init)
-	} > RAM
-	.ARM.extab : 
-	{
-		*(.ARM.extab* .gnu.linkonce.armextab.*)
-		PROVIDE_HIDDEN (__exidx_start = .);
-	} > RAM
-	.ARM.exidx : 
-	{
-		*(.ARM.exidx .gnu.linkonce.armexidx.*)
-		PROVIDE_HIDDEN (__exidx_end = .);
-	} > RAM
-	
-	.fini : 
-	{
-		*(.fini)
-	} > RAM
-	.got : 
-	{
-		*(.got)
-		*(.got.plt)
-	} > RAM
+	} > SPIBSC
 	.rodata : 
 	{
 		*(.rodata)
 		*(.rodata.*)
 		_erodata = .;
-	} > RAM
-	.eh_frame_hdr : 
-	{
-		*(.eh_frame_hdr)
-	} > RAM
-	.eh_frame : 
-	{
-		*(.eh_frame)
-	} > RAM
-	.jcr : 
-	{
-		*(.jcr)
-	} > RAM
+	} > SPIBSC
 	.tors : 
 	{
 		__CTOR_LIST__ = .;
@@ -76,15 +34,15 @@ SECTIONS
 		__DTOR_END__ = .;
 		. = ALIGN(2);
 		_mdata = .;
-	} > RAM
-	.data 0x20060100 : AT (_mdata)
+	} > SPIBSC
+	.data 0x20002000 : AT (_mdata)
 	{
 		_data = .;
 		*(.data)
 		*(.data.*)
 		_edata = .;
 	} > RAM
-	.bss : 
+	.bss 0x20003000 : AT (_mdata)
 	{
 		PROVIDE(__bss_start__ = .);
 		_bss = .;
@@ -101,4 +59,5 @@ SECTIONS
 		_stack = .;
 	} > RAM
 }
+
 ENTRY(_PowerON_Reset)
