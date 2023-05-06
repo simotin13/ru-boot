@@ -11,6 +11,9 @@ rustup default stable
 rustup target add armv7a-none-eabi
 ```
 
+# build
+cargo build --target armv7a-none-eabi
+
 
 # Links
 https://tomoyuki-nakabayashi.github.io/embedded-rust-techniques/01-introduction/introduction.html
