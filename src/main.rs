@@ -1,79 +1,36 @@
-/*============================================================================*/
-/* no_std: Don't incorporate the standard library as this is a bare-metal     */
-/*         based program.                                                     */
-/*============================================================================*/
 #![no_std]
-/*============================================================================*/
-/* no_main: Don't use the 'main' function as our entry point.                 */ 
-/*          It is taken care of elsewhere through a modified linker script.   */
-/*============================================================================*/
 #![no_main]
 use core::panic::PanicInfo;
 use core::arch::asm;
-/*============================================================================*/
-/* Because there is the small possibility that _start may not run first,      */
-/* global assembly is used to ensure that _start is put at the beginning of   */
-/* the image.                                                                 */
-/*============================================================================*/
-mod boot {
-    use core::arch::global_asm;
-    /*========================================================================*/
-    /* glabal_asm macro: says all the code below this line is in the _start   */
-    /* section. It can be located in the linker file - linker.ld              */
-    /*========================================================================*/
-    global_asm!(".section .text._start"); 
-}
-/*============================================================================*/
-/* no_mangle: Ensures that name _start is managable, because y default it     */
-/* might get 'mangled'. Ensures that in the link environment the symbol name  */
-/* is _start.                                                                 */
-/*============================================================================*/
+
+const LED_PTN_RED_RED: u16      = 0x3000;
+const LED_PTN_RED_GREEN: u16    = 0x5000;
+const LED_PTN_RED_BLUE: u16     = 0x9000;
+
 #[no_mangle]
-/*============================================================================*/
-/* Declared as public (extern "C") ensuring the _start symbol is globally     */ 
-/* accessible and the linker can see it at link time, ordered in the right way*/
-/* ===========================================================================*/
-pub extern "C" fn _start() -> ! {
-    /*========================================================================*/
-    /* unsafe: The compiler can trust the code and I don't require Rust's     */
-    /* memory safety guarantees enforced at compile time for this example.    */
-    /*========================================================================*/
+pub extern "C" fn main() -> ! {
     unsafe { 
-        /*====================================================================*/
-        /* Set-up GPIO21 to be an output pin.                                 */
-        /*====================================================================*/
-        core::ptr::write_volatile(0x3F20_0008 as *mut u32, 1<<3);
-        /*====================================================================*/
-        // Enter an infinite loop that turns an LED on GPIO 21 On and Off.    */
-        /*====================================================================*/
+        // P6  : 0xFCFE3018
+        // PM6 : 0xFCFE3318
+        // PMC6: 0xFCFE3418
+        core::ptr::write_volatile(0xFCFE3318 as *mut u16, 0x0001);
+        core::ptr::write_volatile(0xFCFE3418 as *mut u16, 0x0000);
         loop { 
-            /*================================================================*/
-            // Turn the LED ON by toggling the output pin HIGH                */
-            /*================================================================*/
-            core::ptr::write_volatile(0x3F20_001C as *mut u32, 1<<21);
-            /*================================================================*/
-            // Wait 50000 ticks, so the LED ON state can be seen.             */
-            /*================================================================*/
-            for _ in 1..50000 {
+            core::ptr::write_volatile(0xFCFE3018 as *mut u16, LED_PTN_RED_RED);
+            for _ in 1..30000 {
                 asm!("nop");
             }
-            /*================================================================*/
-            // Turn the LED OFF by toggling the output pin LOW                */
-            /*================================================================*/
-            core::ptr::write_volatile(0x3F20_0028 as *mut u32, 1<<21);
-            /*================================================================*/
-            // Wait 50000 ticks, so the LED ON state can be seen.             */
-            /*================================================================*/
-            for _ in 1..50000 {
+            core::ptr::write_volatile(0xFCFE3018 as *mut u16, LED_PTN_RED_GREEN);
+            for _ in 1..30000 {
+                asm!("nop");
+            }
+            core::ptr::write_volatile(0xFCFE3018 as *mut u16, LED_PTN_RED_BLUE);
+            for _ in 1..30000 {
                 asm!("nop");
             }
         } 
     }
 } 
-/*============================================================================*/
-/* The panic handler is entered when the OS kernel detects an error and is    */
-/* required to ensure error free compilation                                  */
-/*============================================================================*/
 #[panic_handler] 
 fn panic (_info: &PanicInfo) -> ! {
     loop {}
