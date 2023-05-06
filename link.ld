@@ -101,4 +101,4 @@ SECTIONS
 		_stack = .;
 	} > RAM
 }
-
+ENTRY(_PowerON_Reset)

@@ -1,4 +1,6 @@
+# ARMv7
 [target.armv7a-none-eabi]
+linker = "arm-none-eabi-gcc"
 rustflags = [
   "-C", "link-arg=-Tlink.ld",
 ]
