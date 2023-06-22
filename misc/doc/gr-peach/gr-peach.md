@@ -1,4 +1,4 @@
-# GR-MANGO
+# GR-Peach
 
 ## Spec
  - CPU:  RZ/A1H(R7S721001VCBG), Cortex-A9
@@ -35,6 +35,8 @@ P6_8:XBDIO1
 0x0400_0000～0x07FF_FFFF: CS1空間 (64MB)
 0x0000_0000～0x03FF_FFFF: CS0空間 (64MB)
 
+# SDCard
+SPI2
 
 ## link
 
